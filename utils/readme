@@ -1,0 +1,35 @@
+Readme UTILS
+
+Для компиляции утилит выполнить команду: make  
+
+1) mbrtu - утилита чтения и записи регистров устроства по modbus протоколу.
+Syntax: 
+	mbrtu <device> [-s] <speed> <addr> <rh|ri|wh> <reg> [<data>] [<count>]
+		[-S or -s]	- use simplified output (for script)
+		<device>   	- /dev/ttyUSB0
+		<speed>    	- baudrate, only 9600,19200,57600,115200
+		<addr> 	   	- address device, 1...255 
+		<rh|ri|wh> 	- function modbus, rh-read holding ,ri-read input ,wh-write holding
+    		<reg>      	- address register, 0...65535
+    		[<data>]   	- value for write (only wh), 0...65535
+    		[<count>]  	- amount registers for read (only rh,ri), 1...255
+Example: 
+	mbrtu -s /tty/USB0 19200 1 rh 10 10
+
+2) readstr - утилита чтения из сом порта и поиск контрольной фразы
+Syntax: 
+	readstr <device> <string> <timeout>
+		<device>   	- /dev/ttyUSB0
+		<string>   	- string for find uart
+		<timeout>  	- timeout uart
+Example: 
+	readstr -/tty/USB0 "default:" 2000
+
+3) sendstr - утилита отправки команд в сом порт
+Syntax: 
+	sendstr <device> "<command>" 
+		<device>   	- /dev/ttyUSB0
+		<command> 	- command to uart, string or "-u" - CLEAR$ "-n" - ENTER
+Example: 
+	sendstr -/tty/USB0 "y"
+	sendstr -/tty/USB0 -n

@@ -1,0 +1,20 @@
+Readme testPRO
+
+Состав проекта:
+testPRO:
+ 	/config 	- конфигурация оборудования
+	/procedure 	- процедуры тестовых программ
+	/test		- тестовые программы
+	/utils		- дополнительные утилиты
+
+Установка библиотеки libmodbus (выполнять под root):
+1. wget https://libmodbus.org/releases/libmodbus-3.1.6.tar.gz
+2. tar xvzf libmodbus-3.1.6.tar.gz
+3. cd libmodbus-3.1.6
+4. ./configure && make install
+
+Установка сервера TFTPD-HPA:
+1. sudo apt-get install tftpd-hpa
+2. в папку /srv/tftp/ копировать прошивки
+
+ 
