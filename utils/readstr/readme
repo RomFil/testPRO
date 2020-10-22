@@ -1,0 +1,12 @@
+Readme UTILS
+
+Для компиляции утилиты выполнить команду: make  
+
+readstr - утилита чтения из сом порта и поиск контрольной фразы
+Syntax: 
+	readstr <device> <string> <timeout>
+		<device>   	- /dev/ttyUSB0
+		<string>   	- string for find uart
+		<timeout>  	- timeout uart
+Example: 
+	readstr -/tty/USB0 "default:" 2000

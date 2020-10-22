@@ -159,6 +159,7 @@ int main(int argc, char** argv) {
 	char *string_find;
 	unsigned int timeout;
 	char welcome = 0;
+	int result;
 
 	prog_name=argv[0];
 	
@@ -187,6 +188,7 @@ int main(int argc, char** argv) {
 	}
 	
 	timeout = atoi(argv[3]);
+	result = OK;
 	
 	// ----- Open port tty
 	fd = open(port, O_RDWR | O_NONBLOCK | O_NOCTTY);
@@ -199,7 +201,9 @@ int main(int argc, char** argv) {
 	
 	if (set_attr_tty(fd, B57600, 0 , CS8, 0)) {
 		fprintf(stderr, "ERROR (set attr uart) : %s (%d)\n", strerror(errno), errno);
-		return(ERR_IO);
+		result = ERR_IO;
+		goto exit;
+		//return(ERR_IO);
 	}
 	/*
 	if (waitquiet(fd, 15)) {
@@ -210,7 +214,9 @@ int main(int argc, char** argv) {
 	rc = uart_find_string(fd, read_buffer, BUFF_SIZE, string_find,  timeout); 
 	if(rc < 0) {
 		fprintf(stderr, "ERROR (read uart string) : timeout\n");
-		return(ERR);
+		result = ERR;
+		goto exit;
+		//return(ERR);
 	} 
 	
 	//printf("READ_BUFFER ----------- %s\n", read_buffer);
@@ -221,13 +227,14 @@ int main(int argc, char** argv) {
 		int cnt;
 		char uboot_str[256] = { 0 };
 		
-		//printf("read_buffer --- %s\n", read_buffer);
 		istr = strstr(read_buffer, "U-Boot");
 		if (!istr) {
 			fprintf(stderr, "ERROR (find U-Boot)\n");
-			return(ERR);
+			result = ERR;
+			goto exit;
+			//return(ERR);
 		}
-		//printf("istr --- %s\n", istr);
+
 		cnt = 0;
 		while (*istr) {
 			if (istr[0] == '\n') {
@@ -242,9 +249,12 @@ int main(int argc, char** argv) {
 	
 	if (tcsetattr(fd, TCSANOW, &save_tty) < 0) {
 		fprintf(stderr, "ERROR (restore attr uart)\n");
-		return(ERR);
+		result = ERR;
+		goto exit;
+		//return(ERR);
 	}
 
+exit:
 	flock(fd, LOCK_UN);
     if (fd) {
 		close(fd);
@@ -253,5 +263,5 @@ int main(int argc, char** argv) {
 		return(ERR);
 	}
 	
-	return(OK);
+	return(result);
 }

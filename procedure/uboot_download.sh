@@ -1,47 +1,47 @@
 #!/bin/bash
 
-utils/readstr -wu $PORT_CONSOLE "default: 3" 5000
+readstr -wu $PORT_CONSOLE "default: 3" 5000
 if [ $? -ne 0 ]; then
 	echo "ERROR WELCOME UBOOT"
 	exit
 fi
 	
-utils/sendstr $PORT_CONSOLE 2	
-utils/readstr $PORT_CONSOLE "(Y/N)" 2000
+sendstr $PORT_CONSOLE 2	
+readstr $PORT_CONSOLE "(Y/N)" 2000
 if [ $? -ne 0 ]; then
 	echo "ERROR START UBOOT"
 	exit
 fi
 	
-utils/sendstr $PORT_CONSOLE "y"
-utils/readstr $PORT_CONSOLE "==:" 2000
+sendstr $PORT_CONSOLE "y"
+readstr $PORT_CONSOLE "==:" 2000
 if [ $? -ne 0 ]; then
 	echo "ERROR CONFIRM UBOOT"
 	exit
 fi
 
-utils/sendstr $PORT_CONSOLE -u
-utils/sendstr $PORT_CONSOLE "$UBOOT_IP_CLIENT"
-utils/sendstr $PORT_CONSOLE -n
-utils/readstr $PORT_CONSOLE "==:" 2000
+sendstr $PORT_CONSOLE -u
+sendstr $PORT_CONSOLE "$UBOOT_IP_CLIENT"
+sendstr $PORT_CONSOLE -n
+readstr $PORT_CONSOLE "==:" 2000
 if [ $? -ne 0 ]; then
 	echo "ERROR IP CLIENT"
 	exit
 fi
 	
-utils/sendstr $PORT_CONSOLE -u
-utils/sendstr $PORT_CONSOLE "$UBOOT_IP_SERVER"
-utils/sendstr $PORT_CONSOLE -n
-utils/readstr $PORT_CONSOLE "==:" 2000
+sendstr $PORT_CONSOLE -u
+sendstr $PORT_CONSOLE "$UBOOT_IP_SERVER"
+sendstr $PORT_CONSOLE -n
+readstr $PORT_CONSOLE "==:" 2000
 if [ $? -ne 0 ]; then
 	echo "ERROR IP SERVER"
 	exit
 fi
 
-utils/sendstr $PORT_CONSOLE "$FIRMWARE"
-utils/sendstr $PORT_CONSOLE -n
+sendstr $PORT_CONSOLE "$FIRMWARE"
+sendstr $PORT_CONSOLE -n
 	
-utils/readstr $PORT_CONSOLE "Loading" 3000
+readstr $PORT_CONSOLE "Loading" 3000
 
 if [ $? -ne 0 ]; then
 	echo "ERROR START DOWNLOAD"
@@ -56,7 +56,7 @@ $(sudo ip addr add $UBOOT_IP_SERVER/24 dev $ETHER)
 sudo systemctl start tftpd-hpa.service
 	
 # Checking loading device
-utils/readstr $PORT_CONSOLE "done" 40000
+readstr $PORT_CONSOLE "done" 40000
 if [ $? -ne 0 ]; then
 	echo "ERROR СOMPLETE DOWNLOAD"
 	exit
@@ -70,7 +70,7 @@ echo "OK"
 echo "Starting reload firmware $FIRMWARE"
 
 # Checking start device
-utils/readstr $PORT_CONSOLE "Starting kernel" 90000
+readstr $PORT_CONSOLE "Starting kernel" 90000
 if [ $? -ne 0 ]; then
 	echo "ERROR СOMPLETE DOWNLOAD"
 	exit

@@ -57,14 +57,35 @@ static void usage(const char *progname) {
 int uart_send(int fd, char *cmd) {
 	int cnt;
 	int len;
+	int retry;
 	
 	len = strlen(cmd);
+	retry = 30;
+	
+	while (len && retry) {
+		cnt = write(fd, cmd, len);
+		if (cnt < 0) {
+			if (errno != EAGAIN) 
+				return 1;
+			cnt	= 0;
+			usleep(100 * 1000);
+		}
+		else {
+			cmd = cmd + cnt;
+			len-=cnt;
+		}
+		retry--;	
+	}
+
+	return (len > 0);
+	/*
 	cnt = len;
 	if (len) {
 		cnt = write(fd, cmd, len);
 	}
 	
 	return (len != cnt);
+	* */
 }
 
 int main(int argc, char** argv) {
@@ -138,7 +159,7 @@ int main(int argc, char** argv) {
 		return(ERR);
 	}
 	
-	usleep(50000);
+	usleep(50 * 1000);
 	
 	return(OK);
 }

@@ -1,0 +1,12 @@
+Readme UTILS
+
+Для компиляции утилиты выполнить команду: make  
+
+sendstr - утилита отправки команд в сом порт
+Syntax: 
+	sendstr <device> "<command>" 
+		<device>   	- /dev/ttyUSB0
+		<command> 	- command to uart, string or "-u" - CLEAR$ "-n" - ENTER
+Example: 
+	sendstr -/tty/USB0 "y"
+	sendstr -/tty/USB0 -n
